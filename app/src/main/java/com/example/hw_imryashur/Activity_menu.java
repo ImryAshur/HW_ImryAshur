@@ -1,5 +1,8 @@
 package com.example.hw_imryashur;
-
+/*
+ * Student - Imry Ashur
+ * ID - 203958228
+ * */
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -17,6 +20,8 @@ public class Activity_menu extends AppCompatActivity {
     private ImageView menu_IMG_winnerPic;
     private TextView menu_LBL_winnerName;
     private Button menu_BTN_newGame;
+    public static final String winnerPlayer = "winnerPlayer";
+    public static final String image = "image";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +29,8 @@ public class Activity_menu extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
         findViews();
         Intent intent = getIntent();
-        String winnerName = intent.getStringExtra("winnerPlayer");
-        Bitmap bitmap = (Bitmap) intent.getParcelableExtra("Image");
+        String winnerName = intent.getStringExtra(winnerPlayer);
+        Bitmap bitmap = (Bitmap) intent.getParcelableExtra(image);
         menu_LBL_winnerName.setText(winnerName);
         menu_BTN_newGame.setOnClickListener(newGameBtn);
 

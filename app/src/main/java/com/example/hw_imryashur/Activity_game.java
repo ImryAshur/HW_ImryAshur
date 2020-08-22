@@ -1,28 +1,27 @@
 package com.example.hw_imryashur;
-
+/*
+ * Student - Imry Ashur
+ * ID - 203958228
+ * */
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-
 import com.bumptech.glide.Glide;
 
-import static com.example.hw_imryashur.R.color.game_BTN_backgroundbtn;
-import static com.example.hw_imryashur.R.color.game_BTN_backgroundbtndef;
-
 public class Activity_game extends AppCompatActivity {
-    private int ronaldoLife = 100;
-    private int messiLife = 100;
-    private final int shot = 10;
-    private final int freeKick = 20;
-    private final int penalty = 30;
+    private int RONALDOLIFE = 100;
+    private int MESSILIFE = 100;
+    private final int SHOT = 10;
+    private final int FREEKICK = 20;
+    private final int PENALTY = 30;
     private boolean ronaldoTurn = true;
     private ImageView game_IMG_ronalno;
     private ImageView game_IMG_messi;
@@ -34,78 +33,23 @@ public class Activity_game extends AppCompatActivity {
     private Button game_BTN_penalty_M;
     private ProgressBar game_progressBar_ronaldoLife;
     private ProgressBar game_progressBar_messiLife;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         findviews();
         game();
-        game_BTN_shot_M.setOnClickListener(shotClickListener);
-        game_BTN_shot_R.setOnClickListener(shotClickListener);
-        game_BTN_freeKick_M.setOnClickListener(freeKickClickListener);
-        game_BTN_freeKick_R.setOnClickListener(freeKickClickListener);
-        game_BTN_penalty_M.setOnClickListener(penaltyClickListener);
-        game_BTN_penalty_R.setOnClickListener(penaltyClickListener);
 
-        Glide
-                .with(this)
-                .load(R.drawable.ronaldo)
-                .centerCrop()
-                .into(game_IMG_ronalno);
-        Glide
-                .with(this)
-                .load(R.drawable.messi)
-                .centerCrop()
-                .into(game_IMG_messi);
-    }
+        setListener(game_BTN_shot_M,shotClickListener);
+        setListener(game_BTN_shot_R,shotClickListener);
+        setListener(game_BTN_freeKick_M,freeKickClickListener);
+        setListener(game_BTN_freeKick_R,freeKickClickListener);
+        setListener(game_BTN_penalty_M,penaltyClickListener);
+        setListener(game_BTN_penalty_R,penaltyClickListener);
 
-
-    private void endGame() {
-        if (messiLife <= 0) postWinner("Ronaldo Wins!" , game_IMG_ronalno);
-        if (ronaldoLife <= 0) postWinner("Messi Wins!", game_IMG_messi);
-    }
-
-    private void postWinner(String winner , ImageView pic) {
-        pic.buildDrawingCache();
-        Bitmap bitmap = pic.getDrawingCache();
-        Intent myIntent = new Intent(Activity_game.this, Activity_menu.class);
-        myIntent.putExtra("winnerPlayer", winner); //Optional parameters
-        myIntent.putExtra("Image", bitmap);
-        Activity_game.this.startActivity(myIntent);
-        finish();
-    }
-
-    private void game() {
-        if (ronaldoTurn == true) {
-            setButtons(game_BTN_shot_R,game_BTN_shot_M);
-            setButtons(game_BTN_freeKick_R,game_BTN_freeKick_M);
-            setButtons(game_BTN_penalty_R,game_BTN_penalty_M);
-        }
-        else  {
-            setButtons(game_BTN_shot_M,game_BTN_shot_R);
-            setButtons(game_BTN_freeKick_M,game_BTN_freeKick_R);
-            setButtons(game_BTN_penalty_M,game_BTN_penalty_R);
-        }
-    }
-
-    private void setButtons(Button isTurn , Button notIsTurn){
-        isTurn.setEnabled(true);
-        notIsTurn.setEnabled(false);
-        isTurn.setBackgroundColor(getResources().getColor(game_BTN_backgroundbtn));
-        notIsTurn.setBackgroundColor(getResources().getColor(game_BTN_backgroundbtndef));
-    }
-
-    private void updateLifeColor() {
-        if (messiLife <= 20 ){
-            lifeColor(game_progressBar_messiLife);
-        }
-        if (ronaldoLife <= 20){
-            lifeColor(game_progressBar_ronaldoLife);
-        }
-    }
-    private void lifeColor(ProgressBar playerLife) {
-        playerLife.getProgressDrawable().setColorFilter(
-                Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
+        glide(R.drawable.ronaldo,game_IMG_ronalno);
+        glide(R.drawable.messi,game_IMG_messi);
     }
     private void findviews() {
         game_IMG_ronalno = findViewById(R.id.game_IMG_ronaldo);
@@ -120,36 +64,93 @@ public class Activity_game extends AppCompatActivity {
         game_BTN_penalty_M = findViewById(R.id.game_BTN_penalty_M);
     }
 
+    private void setListener(Button btn, View.OnClickListener func){
+        btn.setOnClickListener(func);
+    }
+
+    private void glide(int img, ImageView into){
+        Glide
+                .with(Activity_game.this)
+                .load(img)
+                .centerCrop()
+                .into(into);
+    }
+
+    private void endGame() {
+        if (MESSILIFE <= 0) postWinner("Ronaldo Wins!" , game_IMG_ronalno);
+        if (RONALDOLIFE <= 0) postWinner("Messi Wins!", game_IMG_messi);
+    }
+
+    private void postWinner(String winner , ImageView pic) {
+        pic.buildDrawingCache();
+        Bitmap bitmap = pic.getDrawingCache();
+        Intent myIntent = new Intent(Activity_game.this, Activity_menu.class);
+        myIntent.putExtra(Activity_menu.winnerPlayer, winner); //Optional parameters
+        myIntent.putExtra(Activity_menu.image, bitmap);
+        Activity_game.this.startActivity(myIntent);
+        finish();
+    }
+
+    private void game() {
+        if (ronaldoTurn) {
+            setButtons(game_BTN_shot_R,game_BTN_shot_M);
+            setButtons(game_BTN_freeKick_R,game_BTN_freeKick_M);
+            setButtons(game_BTN_penalty_R,game_BTN_penalty_M);
+        }
+        else  {
+            setButtons(game_BTN_shot_M,game_BTN_shot_R);
+            setButtons(game_BTN_freeKick_M,game_BTN_freeKick_R);
+            setButtons(game_BTN_penalty_M,game_BTN_penalty_R);
+        }
+    }
+
+
+/* enable / disenable buttons , set drawable with style and color*/
+    private void setButtons(Button isTurn , Button notIsTurn){
+        isTurn.setEnabled(true);
+        notIsTurn.setEnabled(false);
+        isTurn.setBackgroundResource(R.drawable.game_playbuttons);
+        notIsTurn.setBackgroundResource(R.drawable.unplaybuttons);
+    }
+
+    private void updateLifeColor() {
+        if (MESSILIFE <= 20 ){
+            lifeColor(game_progressBar_messiLife);
+        }
+        if (RONALDOLIFE <= 20){
+            lifeColor(game_progressBar_ronaldoLife);
+        }
+    }
+
+    //Set progressBar color
+    private void lifeColor(ProgressBar playerLife) {
+        playerLife.getProgressDrawable().setColorFilter(
+                Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
+    }
 
     private View.OnClickListener shotClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             if (((String) view.getTag()).equals("r") ) {
-                messiLife = setlife(messiLife,shot,game_progressBar_messiLife,false);
+                MESSILIFE = setlife(MESSILIFE, SHOT,game_progressBar_messiLife,false);
             }
             else if (((String) view.getTag()).equals("m") ){
-                ronaldoLife = setlife(ronaldoLife,shot,game_progressBar_ronaldoLife,true);
+                RONALDOLIFE = setlife(RONALDOLIFE, SHOT,game_progressBar_ronaldoLife,true);
             }
-            updateLifeColor();
-            game();
-            endGame();
+            step();
         }
     };
-
-
 
     private View.OnClickListener freeKickClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             if (((String) view.getTag()).equals("r") ) {
-                messiLife = setlife(messiLife,freeKick,game_progressBar_messiLife,false);
+                MESSILIFE = setlife(MESSILIFE, FREEKICK,game_progressBar_messiLife,false);
             }
             else if (((String) view.getTag()).equals("m") ){
-                ronaldoLife = setlife(ronaldoLife,freeKick,game_progressBar_ronaldoLife,true);
+                RONALDOLIFE = setlife(RONALDOLIFE, FREEKICK,game_progressBar_ronaldoLife,true);
             }
-            updateLifeColor();
-            game();
-            endGame();
+            step();
         }
     };
 
@@ -157,21 +158,28 @@ public class Activity_game extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             if (((String) view.getTag()).equals("r") ) {
-                messiLife = setlife(messiLife,penalty,game_progressBar_messiLife,false);
+                MESSILIFE = setlife(MESSILIFE, PENALTY,game_progressBar_messiLife,false);
             }
             else if (((String) view.getTag()).equals("m") ){
-                ronaldoLife = setlife(ronaldoLife,penalty,game_progressBar_ronaldoLife,true);
+                RONALDOLIFE = setlife(RONALDOLIFE, PENALTY,game_progressBar_ronaldoLife,true);
             }
-            updateLifeColor();
-            game();
-            endGame();
+            step();
         }
     };
+
+/* update player life , change turn and set new player life*/
     private int setlife(int playerLife , int type , ProgressBar playerBar , boolean isRonaldo){
         playerLife = playerLife - type;
         playerBar.setProgress(playerLife);
         ronaldoTurn = isRonaldo;
-        Log.d("pttt", type + " " + isRonaldo + " Life = " + playerLife);
         return playerLife;
+    }
+
+    /*after every click check if the game is over , if no - check whether progress bar need to change
+    * and than set buttons for the next round  */
+    private void step(){
+        endGame();
+        updateLifeColor();
+        game();
     }
 }

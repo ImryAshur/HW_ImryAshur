@@ -15,7 +15,6 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginLeft="2dp"
-            android:src="@drawable/ronaldo"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true">
         </ImageView>
@@ -24,7 +23,6 @@
             android:id="@+id/game_IMG_messi"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/messi"
             android:layout_marginRight="2dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true">
@@ -65,8 +63,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginBottom="5dp"
+                android:padding="5dp"
                 android:text="Shot"
-                android:textColor="@color/game_BTN_btnText"/>
+                android:textColor="@color/game_BTN_btnText"
+                android:background="@drawable/game_playbuttons"/>
 
             <Button
                 android:id="@+id/game_BTN_freeKick_R"
@@ -75,8 +75,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginBottom="5dp"
+                android:padding="5dp"
                 android:text="Free Kick"
-                android:textColor="@color/game_BTN_btnText"/>
+                android:textColor="@color/game_BTN_btnText"
+                android:background="@drawable/game_playbuttons"/>
 
             <Button
                 android:id="@+id/game_BTN_penalty_R"
@@ -85,8 +87,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginBottom="5dp"
+                android:padding="5dp"
                 android:text="Penalty Kick"
-                android:textColor="@color/game_BTN_btnText"/>
+                android:textColor="@color/game_BTN_btnText"
+                android:background="@drawable/game_playbuttons"/>
         </LinearLayout>
 
         <LinearLayout
@@ -105,8 +109,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginBottom="5dp"
+                android:padding="5dp"
                 android:text="Shot"
-                android:textColor="@color/game_BTN_btnText"/>
+                android:textColor="@color/game_BTN_btnText"
+                android:background="@drawable/game_playbuttons"/>
 
 
             <Button
@@ -116,8 +122,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginBottom="5dp"
+                android:padding="5dp"
                 android:text="Free Kick"
-                android:textColor="@color/game_BTN_btnText"/>
+                android:textColor="@color/game_BTN_btnText"
+                android:background="@drawable/game_playbuttons"/>
 
             <Button
                 android:id="@+id/game_BTN_penalty_M"
@@ -126,8 +134,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginBottom="5dp"
+                android:padding="5dp"
                 android:text="penalty kick"
-                android:textColor="@color/game_BTN_btnText"/>
+                android:textColor="@color/game_BTN_btnText"
+                android:background="@drawable/game_playbuttons"
+                />
         </LinearLayout>
 
 
