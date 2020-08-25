@@ -1,7 +1,6 @@
 package com.example.hw_imryashur;
 
-/* Student - Imry Ashur
- * ID - 203958228
+/* Student Name - Imry Ashur
  */
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
