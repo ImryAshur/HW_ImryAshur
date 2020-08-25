@@ -1,6 +1,6 @@
 package com.example.hw_imryashur;
 /*
-    Student Name - Imry Ashur
+   Student Name - Imry Ashur
 */
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
