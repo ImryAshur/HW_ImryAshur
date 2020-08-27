@@ -7,13 +7,19 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import com.bumptech.glide.Glide;
 
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
 public class Activity_game extends AppCompatActivity {
+    public static final Random RANDOM = new Random();
     private int RONALDOLIFE = 100;
     private int MESSILIFE = 100;
     private final int SHOT = 10;
@@ -30,12 +36,15 @@ public class Activity_game extends AppCompatActivity {
     private Button game_BTN_penalty_M;
     private ProgressBar game_progressBar_ronaldoLife;
     private ProgressBar game_progressBar_messiLife;
+    public static final String EXTRA_KEY_TURN = "EXTRA_KEY_TURN";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         findviews();
+        getMyIntent();
+
         game();
 
         setListener(game_BTN_shot_M,shotClickListener);
@@ -47,7 +56,72 @@ public class Activity_game extends AppCompatActivity {
 
         glide(R.drawable.ronaldo,game_IMG_ronalno);
         glide(R.drawable.messi,game_IMG_messi);
+
+
+
+
+
     }
+    @Override
+    protected void onStart() {
+        Log.d("pttt", "onStart");
+        super.onStart();
+        handler.postDelayed(run, DELAY);
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d("pttt", "onStop");
+        super.onStop();
+
+        handler.removeCallbacks(run);
+    }
+
+    Handler handler = new Handler();
+    private final int DELAY = 3000;
+
+    Runnable run = new Runnable(){
+        public void run(){
+            randomMove();
+            Log.d("pttt", "ronaldo life = " + RONALDOLIFE + " messi life = " + MESSILIFE);
+            if (endGame()) {
+                handler.postDelayed(this, DELAY);
+            }
+            }
+    };
+    private void randomMove() {
+        int value = RANDOM.nextInt(3) + 1;
+        Log.d("pttt", "value: " + value);
+
+        switch (value){
+            case 1:
+                makeClick(ronaldoTurn,game_BTN_shot_R,game_BTN_shot_M,"Shot: 10 Points Less");
+                break;
+            case 2:
+                makeClick(ronaldoTurn,game_BTN_freeKick_R,game_BTN_freeKick_M,"Free Kick: 20 Points Less");
+                break;
+            case 3:
+                makeClick(ronaldoTurn,game_BTN_penalty_R,game_BTN_penalty_M,"Penalty: 30 Points Less");
+                break;
+        }
+    }
+
+    private void makeClick(boolean ronaldoTurn, Button ronaldoBtn ,Button messiBtn,String text) {
+        if (ronaldoTurn){
+            ronaldoBtn.performClick();
+            MySignalV2.getInstance().showToast("Ronaldo Choose - " + text);
+        }
+        else{
+            messiBtn.performClick();
+            MySignalV2.getInstance().showToast("Messi Choose - " + text);
+        }
+    }
+
+    private void getMyIntent() {
+        Intent intent = getIntent();
+        ronaldoTurn = intent.getBooleanExtra(EXTRA_KEY_TURN,true);
+    }
+
     private void findviews() {
         game_IMG_ronalno = findViewById(R.id.game_IMG_ronaldo);
         game_IMG_messi = findViewById(R.id.game_IMG_messi);
@@ -73,18 +147,26 @@ public class Activity_game extends AppCompatActivity {
                 .into(into);
     }
 
-    private void endGame() {
-        if (MESSILIFE <= 0) postWinner("Ronaldo Wins!" , game_IMG_ronalno);
-        if (RONALDOLIFE <= 0) postWinner("Messi Wins!", game_IMG_messi);
+    private boolean endGame() {
+        if (MESSILIFE <= 0){
+            postWinner("Ronaldo Wins!" , game_IMG_ronalno);
+            return false;
+        }
+        else if (RONALDOLIFE <= 0){
+            postWinner("Messi Wins!", game_IMG_messi);
+            return false;
+        }
+        return true;
     }
 
     private void postWinner(String winner , ImageView pic) {
+        Log.d("pttt", "WINNER ------> ronaldo life = " + RONALDOLIFE + " messi life = " + MESSILIFE);
         pic.buildDrawingCache();
         Bitmap bitmap = pic.getDrawingCache();
         Intent myIntent = new Intent(Activity_game.this, Activity_menu.class);
         myIntent.putExtra(Activity_menu.winnerPlayer, winner); //Optional parameters
         myIntent.putExtra(Activity_menu.image, bitmap);
-        Activity_game.this.startActivity(myIntent);
+        startActivity(myIntent);
         finish();
     }
 
@@ -104,6 +186,7 @@ public class Activity_game extends AppCompatActivity {
 
 /* enable / disenable buttons , set drawable with style and color*/
     private void setButtons(Button isTurn , Button notIsTurn){
+        isTurn.setClickable(false);
         isTurn.setEnabled(true);
         notIsTurn.setEnabled(false);
         isTurn.setBackgroundResource(R.drawable.game_playbuttons);
@@ -166,6 +249,7 @@ public class Activity_game extends AppCompatActivity {
 
 /* update player life , change turn and set new player life*/
     private int setlife(int playerLife , int type , ProgressBar playerBar , boolean isRonaldo){
+        Log.d("pttt", "setlife: ronaldo turn " + isRonaldo);
         playerLife = playerLife - type;
         playerBar.setProgress(playerLife);
         ronaldoTurn = isRonaldo;
@@ -175,7 +259,7 @@ public class Activity_game extends AppCompatActivity {
     /*after every click check if the game is over , if no - check whether progress bar need to change
     * and than set buttons for the next round  */
     private void step(){
-        endGame();
+        //endGame();
         updateLifeColor();
         game();
     }
