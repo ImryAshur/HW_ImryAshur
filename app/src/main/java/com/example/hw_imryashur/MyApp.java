@@ -9,7 +9,7 @@ public class MyApp extends Application {
         super.onCreate();
 
         MySignalV2.initHelper(this);
-
+       // Activity_Record record = new Activity_Record();
         MySharedPreferencesV4.initHelper(this);
 
     }
