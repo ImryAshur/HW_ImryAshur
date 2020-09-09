@@ -14,7 +14,7 @@
         android:layout_centerVertical="true">
 
         <ImageView
-            android:id="@+id/main_IMG_ronaldo"
+            android:id="@+id/rollDice_IMG_ronaldo"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginStart="20dp"
@@ -22,7 +22,7 @@
             />
 
         <ImageView
-            android:id="@+id/main_IMG_cube1"
+            android:id="@+id/rollDice_IMG_cube1"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginStart="20dp"
@@ -39,7 +39,7 @@
         android:layout_centerVertical="true">
 
         <ImageView
-            android:id="@+id/main_IMG_messi"
+            android:id="@+id/rollDice_IMG_messi"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginStart="20dp"
@@ -47,15 +47,23 @@
             />
 
         <ImageView
-            android:id="@+id/main_IMG_cube2"
+            android:id="@+id/rollDice_IMG_cube2"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginStart="20dp"
             />
     </LinearLayout>
-
     <Button
-        android:id="@+id/main_BTN_rollDices"
+        android:id="@+id/rollDice_BTN_topTen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="top ten"
+        android:textSize="20sp"
+        android:layout_above="@+id/rollDice_BTN_rollDices"
+        android:layout_marginBottom="10dp"
+        android:layout_centerHorizontal="true"/>
+    <Button
+        android:id="@+id/rollDice_BTN_rollDices"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Roll Dices"
@@ -65,7 +73,7 @@
         android:layout_centerHorizontal="true"/>
 
     <TextView
-        android:id="@+id/main_LBL_text"
+        android:id="@+id/rollDice_LBL_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"

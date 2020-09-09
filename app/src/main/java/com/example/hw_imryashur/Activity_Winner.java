@@ -2,6 +2,7 @@ package com.example.hw_imryashur;
 /*
     Student - Imry Ashur
 */
+
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -31,6 +32,7 @@ public class Activity_Winner extends AppCompatActivity {
         setContentView(R.layout.activity_winner);
         findViews();
         getMyIntent();
+        MySignalV2.getInstance().makeSound(R.raw.victory_sound);
         menu_LBL_winnerName.setText(winnerName + " Wins!");
         menu_LBL_numOfSteps.setText("Number Of Steps: " + steps);
         menu_BTN_newGame.setOnClickListener(newGameBtn);
@@ -61,6 +63,7 @@ public class Activity_Winner extends AppCompatActivity {
     private View.OnClickListener newGameBtn = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            MySignalV2.getInstance().makeSound(R.raw.click_on);
             Intent myIntent = new Intent(Activity_Winner.this, Activity_RollDice.class);
             Activity_Winner.this.startActivity(myIntent);
             finish();
@@ -69,6 +72,7 @@ public class Activity_Winner extends AppCompatActivity {
     private View.OnClickListener topTen = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            MySignalV2.getInstance().makeSound(R.raw.click_on);
             Intent myIntent = new Intent(Activity_Winner.this, Activity_Results.class);
             Activity_Winner.this.startActivity(myIntent);
         }

@@ -1,7 +1,8 @@
 package com.example.hw_imryashur;
-
+/*
+    Student - Imry Ashur
+*/
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ public class Fragment_List extends Fragment {
     private ListView list_LST_list;
     private ArrayList<TopTen> topTens;
     private CallBack_List callBack_list;
-    public final String EXTRA_KEY_DATA = "EXTRA_KEY_DATA";
+    //public final String EXTRA_KEY_DATA = "EXTRA_KEY_DATA";
 
     public void setActivityCallBack(CallBack_List callBack_list) {
         this.callBack_list = callBack_list;
@@ -41,12 +42,16 @@ public class Fragment_List extends Fragment {
         }
         findViews(view);
         topTens = MySharedPreferencesV4.getInstance().getArray("DATA",new TypeToken<ArrayList<TopTen>>(){});
-        ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity().getApplicationContext(),android.R.layout.simple_list_item_1,topTens);
-        list_LST_list.setAdapter(arrayAdapter);
+        if(topTens != null){
+            ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity().getApplicationContext(),android.R.layout.simple_list_item_1,topTens);
+            list_LST_list.setAdapter(arrayAdapter);
+        }
+
 
         list_LST_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> listView, View itemView, int itemPosition, long itemId)
             {
+                MySignalV2.getInstance().makeSound(R.raw.button_click);
                 callBack_list.getLocation(topTens.get(itemPosition).getLat(),topTens.get(itemPosition).getLon());
             }
         });
@@ -61,7 +66,6 @@ public class Fragment_List extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Log.d("pttt", "onSaveInstanceState");
         super.onSaveInstanceState(outState);
     }
 }

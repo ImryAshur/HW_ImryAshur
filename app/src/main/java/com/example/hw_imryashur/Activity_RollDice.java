@@ -1,5 +1,7 @@
 package com.example.hw_imryashur;
-
+/*
+    Student - Imry Ashur
+*/
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,25 +14,22 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-
 import com.bumptech.glide.Glide;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-
 import java.util.Random;
 
 public class Activity_RollDice extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
     public static final Random RANDOM = new Random();
-    private Button main_BTN_rollDices;
-    private ImageView main_IMG_cube1, main_IMG_cube2, main_IMG_ronaldo, main_IMG_messi;
+    private Button rollDice_BTN_rollDices, rollDice_BTN_topTen ;
+    private ImageView rollDice_IMG_cube1, rollDice_IMG_cube2, rollDice_IMG_ronaldo, rollDice_IMG_messi;
     private int ronaldoScore, messiScore;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
@@ -44,7 +43,8 @@ public class Activity_RollDice extends AppCompatActivity implements GoogleApiCli
         findViews();
         initviews();
         initLocation();
-        main_BTN_rollDices.setOnClickListener(cubeClickListener);
+        rollDice_BTN_rollDices.setOnClickListener(cubeClickListener);
+        rollDice_BTN_topTen.setOnClickListener(topTenListener);
     }
 
     private void initLocation() {
@@ -70,23 +70,25 @@ public class Activity_RollDice extends AppCompatActivity implements GoogleApiCli
 
 
     protected void onStop() {
+        if(mGoogleApiClient != null)
         mGoogleApiClient.disconnect();
         super.onStop();
     }
 
     private void findViews() {
-        main_BTN_rollDices = findViewById(R.id.main_BTN_rollDices);
-        main_IMG_cube1 = findViewById(R.id.main_IMG_cube1);
-        main_IMG_cube2 = findViewById(R.id.main_IMG_cube2);
-        main_IMG_ronaldo = findViewById(R.id.main_IMG_ronaldo);
-        main_IMG_messi = findViewById(R.id.main_IMG_messi);
+        rollDice_BTN_rollDices = findViewById(R.id.rollDice_BTN_rollDices);
+        rollDice_BTN_topTen = findViewById(R.id.rollDice_BTN_topTen);
+        rollDice_IMG_cube1 = findViewById(R.id.rollDice_IMG_cube1);
+        rollDice_IMG_cube2 = findViewById(R.id.rollDice_IMG_cube2);
+        rollDice_IMG_ronaldo = findViewById(R.id.rollDice_IMG_ronaldo);
+        rollDice_IMG_messi = findViewById(R.id.rollDice_IMG_messi);
     }
 
     private void initviews() {
-        glide(R.drawable.ronaldo, main_IMG_ronaldo);
-        glide(R.drawable.messi, main_IMG_messi);
-        glide(R.drawable.dice_6, main_IMG_cube1);
-        glide(R.drawable.dice_6, main_IMG_cube2);
+        glide(R.drawable.ronaldo, rollDice_IMG_ronaldo);
+        glide(R.drawable.messi, rollDice_IMG_messi);
+        glide(R.drawable.dice_6, rollDice_IMG_cube1);
+        glide(R.drawable.dice_6, rollDice_IMG_cube2);
     }
 
     @Override
@@ -94,6 +96,8 @@ public class Activity_RollDice extends AppCompatActivity implements GoogleApiCli
         if (requestCode == 44) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getLocation();
+            }else{
+                initLocation();
             }
         }
     }
@@ -109,17 +113,25 @@ public class Activity_RollDice extends AppCompatActivity implements GoogleApiCli
     private int randomDiceValue() {
         return RANDOM.nextInt(6) + 1;
     }
-
+    private View.OnClickListener topTenListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            MySignalV2.getInstance().makeSound(R.raw.click_on);
+            Intent intent = new Intent(Activity_RollDice.this,Activity_Results.class);
+            startActivity(intent);
+        }
+    };
     private View.OnClickListener cubeClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+
             final Animation anim1 = AnimationUtils.loadAnimation(Activity_RollDice.this, R.anim.shake);
             final Animation anim2 = AnimationUtils.loadAnimation(Activity_RollDice.this, R.anim.shake);
             final Animation.AnimationListener animationListener = new Animation.AnimationListener() {
 
                 @Override
                 public void onAnimationStart(Animation animation) {
-
+                    MySignalV2.getInstance().makeSound(R.raw.shake_dice);
                 }
 
                 @Override
@@ -128,17 +140,14 @@ public class Activity_RollDice extends AppCompatActivity implements GoogleApiCli
                     int res = getResources().getIdentifier("dice_" + value, "drawable", "com.example.hw_imryashur");
 
                     if (animation == anim1) {
-                        glide(res, main_IMG_cube1);
+                        glide(res, rollDice_IMG_cube1);
                         ronaldoScore = value;
                         Log.d("pttt", "ronaldo Score : " + ronaldoScore);
-                        //main_IMG_cube1.setImageResource(res);
                     } else if (animation == anim2) {
-                        glide(res, main_IMG_cube2);
+                        glide(res, rollDice_IMG_cube2);
                         messiScore = value;
                         Log.d("pttt", "messi Score : " + messiScore);
                         delayNewActivity();
-                        //whoStart();
-                        //main_IMG_cube2.setImageResource(res);
                     }
                 }
 
@@ -151,8 +160,8 @@ public class Activity_RollDice extends AppCompatActivity implements GoogleApiCli
             anim1.setAnimationListener(animationListener);
             anim2.setAnimationListener(animationListener);
 
-            main_IMG_cube1.startAnimation(anim1);
-            main_IMG_cube2.startAnimation(anim2);
+            rollDice_IMG_cube1.startAnimation(anim1);
+            rollDice_IMG_cube2.startAnimation(anim2);
 
         }
     };

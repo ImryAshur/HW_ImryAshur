@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -24,7 +25,7 @@ import java.util.Random;
 public class Activity_Game extends AppCompatActivity {
     public static final Random RANDOM = new Random();
     private Handler handler = new Handler();
-    private final int DELAY = 3000;
+    private final int DELAY = 2000;
     private int RONALDOLIFE = 100;
     private int MESSILIFE = 100;
     private final int SHOT = 10;
@@ -41,6 +42,7 @@ public class Activity_Game extends AppCompatActivity {
     private Button game_BTN_freeKick_M;
     private Button game_BTN_penalty_R;
     private Button game_BTN_penalty_M;
+    private MediaPlayer mediaPlayer;
     private ProgressBar game_progressBar_ronaldoLife;
     private ProgressBar game_progressBar_messiLife;
     private ArrayList<TopTen> scores = new ArrayList<>();
@@ -54,6 +56,7 @@ public class Activity_Game extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        mediaPlayer = MediaPlayer.create(this,R.raw.ronaldo_hook);
         findviews();
         getMyIntent();
         game();
@@ -72,16 +75,13 @@ public class Activity_Game extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        Log.d("pttt", "onStart");
         super.onStart();
         handler.postDelayed(run, DELAY);
     }
 
     @Override
     protected void onStop() {
-        Log.d("pttt", "onStop");
         super.onStop();
-
         handler.removeCallbacks(run);
     }
 
@@ -97,8 +97,6 @@ public class Activity_Game extends AppCompatActivity {
 
     private void randomMove() {
         int value = RANDOM.nextInt(3) + 1;
-        Log.d("pttt", "value: " + value);
-
         switch (value) {
             case 1:
                 makeClick(ronaldoTurn, game_BTN_shot_R, game_BTN_shot_M, "Shot: 10 Points Less");
@@ -230,28 +228,31 @@ public class Activity_Game extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             if (((String) view.getTag()).equals("r")) {
+                MySignalV2.getInstance().makeSound(R.raw.ronaldo_hook);
                 numberOfStepsRonaldo++;
                 MESSILIFE = setlife(MESSILIFE, SHOT, game_progressBar_messiLife, false);
             } else if (((String) view.getTag()).equals("m")) {
+                MySignalV2.getInstance().makeSound(R.raw.messi_hook);
                 numberOfStepsMessi++;
                 RONALDOLIFE = setlife(RONALDOLIFE, SHOT, game_progressBar_ronaldoLife, true);
             }
-
             step();
         }
     };
+
 
     private View.OnClickListener freeKickClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             if (((String) view.getTag()).equals("r")) {
+                MySignalV2.getInstance().makeSound(R.raw.ronaldo_hook);
                 numberOfStepsRonaldo++;
                 MESSILIFE = setlife(MESSILIFE, FREEKICK, game_progressBar_messiLife, false);
             } else if (((String) view.getTag()).equals("m")) {
+                MySignalV2.getInstance().makeSound(R.raw.messi_hook);
                 numberOfStepsMessi++;
                 RONALDOLIFE = setlife(RONALDOLIFE, FREEKICK, game_progressBar_ronaldoLife, true);
             }
-
             step();
         }
     };
@@ -260,13 +261,14 @@ public class Activity_Game extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             if (((String) view.getTag()).equals("r")) {
+                MySignalV2.getInstance().makeSound(R.raw.ronaldo_hook);
                 numberOfStepsRonaldo++;
                 MESSILIFE = setlife(MESSILIFE, PENALTY, game_progressBar_messiLife, false);
             } else if (((String) view.getTag()).equals("m")) {
+                MySignalV2.getInstance().makeSound(R.raw.messi_hook);
                 numberOfStepsMessi++;
                 RONALDOLIFE = setlife(RONALDOLIFE, PENALTY, game_progressBar_ronaldoLife, true);
             }
-
             step();
         }
     };

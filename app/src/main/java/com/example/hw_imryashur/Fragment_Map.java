@@ -1,18 +1,16 @@
 package com.example.hw_imryashur;
-
+/*
+    Student - Imry Ashur
+*/
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -27,6 +25,7 @@ public class Fragment_Map extends Fragment {
     protected View view;
     private MapView mMapView;
     private GoogleMap googleMap;
+    // Init Tel Aviv lat and lon
     private double lat = 32.0646;
     private double lon = 34.7722;
 
