@@ -2,6 +2,7 @@ package com.example.hw_imryashur;
 /*
     Student - Imry Ashur
 */
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,29 +15,24 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import com.bumptech.glide.Glide;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import java.util.Random;
 
-public class Activity_RollDice extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+public class Activity_RollDice extends AppCompatActivity {
 
     public static final Random RANDOM = new Random();
-    private Button rollDice_BTN_rollDices, rollDice_BTN_topTen ;
+    private Button rollDice_BTN_rollDices, rollDice_BTN_topTen;
     private ImageView rollDice_IMG_cube1, rollDice_IMG_cube2, rollDice_IMG_ronaldo, rollDice_IMG_messi;
     private int ronaldoScore = 0;
     private int messiScore = 0;
     private double lat = 0.0;
     private double lon = 0.0;
-    private GoogleApiClient mGoogleApiClient;
-    private Location mLastLocation;
-
+    private FusedLocationProviderClient fusedLocationProviderClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,37 +40,8 @@ public class Activity_RollDice extends AppCompatActivity implements GoogleApiCli
         setContentView(R.layout.activity_rolldice);
         findViews();
         initviews();
-        initLocation();
         rollDice_BTN_rollDices.setOnClickListener(cubeClickListener);
         rollDice_BTN_topTen.setOnClickListener(topTenListener);
-    }
-
-
-    private void initLocation() {
-        if (ActivityCompat.checkSelfPermission(Activity_RollDice.this, Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED) {
-            getLocation();
-        } else {
-            ActivityCompat.requestPermissions(Activity_RollDice.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
-        }
-    }
-
-    private void getLocation() {
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-            mGoogleApiClient.connect();
-        }
-    }
-
-
-    protected void onStop() {
-        if(mGoogleApiClient != null)
-        mGoogleApiClient.disconnect();
-        super.onStop();
     }
 
     private void findViews() {
@@ -93,18 +60,6 @@ public class Activity_RollDice extends AppCompatActivity implements GoogleApiCli
         glide(R.drawable.dice_6, rollDice_IMG_cube2);
     }
 
-    // Get permission from user until he accept
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 44) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getLocation();
-            }else{
-                initLocation();
-            }
-        }
-    }
-
     // use glide for dice pictures
     private void glide(int img, ImageView into) {
         Glide
@@ -117,11 +72,12 @@ public class Activity_RollDice extends AppCompatActivity implements GoogleApiCli
     private int randomDiceValue() {
         return RANDOM.nextInt(6) + 1;
     }
+
     private View.OnClickListener topTenListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             MySignalV2.getInstance().makeSound(R.raw.click_on);
-            Intent intent = new Intent(Activity_RollDice.this,Activity_Results.class);
+            Intent intent = new Intent(Activity_RollDice.this, Activity_Results.class);
             startActivity(intent);
         }
     };
@@ -200,25 +156,28 @@ public class Activity_RollDice extends AppCompatActivity implements GoogleApiCli
         }, delay);
     }
 
-    //get lat & lon
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        try {
-            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                    mGoogleApiClient);
-            if (mLastLocation != null) {
-                lon = mLastLocation.getLongitude();
-                lat = mLastLocation.getLatitude();
-            }
-        } catch (SecurityException e) {
+    private void myLocation() {
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 2);
         }
+        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(Activity_RollDice.this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    lat = location.getLatitude();
+                    lon = location.getLongitude();
+                    Log.d("pttt", lat + ", " + lon);
+                }
+            }
+        });
     }
 
+    // Ask for permission until receiving
     @Override
-    public void onConnectionSuspended(int i) {
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    protected void onResume() {
+        super.onResume();
+        myLocation();
     }
 }

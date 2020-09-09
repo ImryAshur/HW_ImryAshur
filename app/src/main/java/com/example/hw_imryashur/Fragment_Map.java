@@ -74,13 +74,7 @@ public class Fragment_Map extends Fragment {
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
 
-                // For showing a move to my location button
-                if (ActivityCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext().getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-                    return;
-                }
-                googleMap.setMyLocationEnabled(true);
-
+                mMap.clear();
                 // For dropping a marker at a point on the Map
                 LatLng myLoc = new LatLng(lat, lon);
                 googleMap.addMarker(new MarkerOptions().position(myLoc));
