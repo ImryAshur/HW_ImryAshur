@@ -20,11 +20,6 @@
             android:screenOrientation="landscape">
 
         </activity>
-        <activity
-            android:name=".Activity_Record"
-            android:screenOrientation="landscape">
-
-        </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -32,7 +27,6 @@
 
         <uses-library android:name="com.google.android.maps" />
 
-        <activity android:name=".Activity_map"></activity>
         <activity
             android:name=".Activity_Winner"
             android:screenOrientation="landscape" />
@@ -49,7 +43,6 @@
             </intent-filter>
 
         </activity>
-
 
     </application>
 

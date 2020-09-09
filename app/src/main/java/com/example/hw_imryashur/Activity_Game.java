@@ -2,12 +2,9 @@ package com.example.hw_imryashur;
 /*
    Student Name - Imry Ashur
 */
-
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -15,12 +12,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import com.bumptech.glide.Glide;
 import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
-
 
 public class Activity_Game extends AppCompatActivity {
     public static final Random RANDOM = new Random();
@@ -42,7 +37,6 @@ public class Activity_Game extends AppCompatActivity {
     private Button game_BTN_freeKick_M;
     private Button game_BTN_penalty_R;
     private Button game_BTN_penalty_M;
-    private MediaPlayer mediaPlayer;
     private ProgressBar game_progressBar_ronaldoLife;
     private ProgressBar game_progressBar_messiLife;
     private ArrayList<TopTen> scores = new ArrayList<>();
@@ -56,8 +50,8 @@ public class Activity_Game extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        mediaPlayer = MediaPlayer.create(this,R.raw.ronaldo_hook);
         findviews();
+        initViews();
         getMyIntent();
         game();
         setListener(game_BTN_shot_M, shotClickListener);
@@ -67,10 +61,23 @@ public class Activity_Game extends AppCompatActivity {
         setListener(game_BTN_penalty_M, penaltyClickListener);
         setListener(game_BTN_penalty_R, penaltyClickListener);
 
-        glide(R.drawable.ronaldo, game_IMG_ronalno);
-        glide(R.drawable.messi, game_IMG_messi);
+    }
+    private void findviews() {
+        game_IMG_ronalno = findViewById(R.id.game_IMG_ronaldo);
+        game_IMG_messi = findViewById(R.id.game_IMG_messi);
+        game_progressBar_ronaldoLife = findViewById(R.id.game_progressBar_ronaldoLife);
+        game_progressBar_messiLife = findViewById(R.id.game_progressBar_messiLife);
+        game_BTN_shot_R = findViewById(R.id.game_BTN_shot_R);
+        game_BTN_shot_M = findViewById(R.id.game_BTN_shot_M);
+        game_BTN_freeKick_R = findViewById(R.id.game_BTN_freeKick_R);
+        game_BTN_freeKick_M = findViewById(R.id.game_BTN_freeKick_M);
+        game_BTN_penalty_R = findViewById(R.id.game_BTN_penalty_R);
+        game_BTN_penalty_M = findViewById(R.id.game_BTN_penalty_M);
+    }
 
-
+    private void initViews() {
+        game_IMG_ronalno.setImageResource(R.drawable.ic_ronaldo);
+        game_IMG_messi.setImageResource(R.drawable.ic_messi);
     }
 
     @Override
@@ -94,7 +101,7 @@ public class Activity_Game extends AppCompatActivity {
             }
         }
     };
-
+    // get random value and make click button
     private void randomMove() {
         int value = RANDOM.nextInt(3) + 1;
         switch (value) {
@@ -127,50 +134,29 @@ public class Activity_Game extends AppCompatActivity {
         lon = intent.getDoubleExtra(EXTRA_KEY_LON,0.0);
     }
 
-    private void findviews() {
-        game_IMG_ronalno = findViewById(R.id.game_IMG_ronaldo);
-        game_IMG_messi = findViewById(R.id.game_IMG_messi);
-        game_progressBar_ronaldoLife = findViewById(R.id.game_progressBar_ronaldoLife);
-        game_progressBar_messiLife = findViewById(R.id.game_progressBar_messiLife);
-        game_BTN_shot_R = findViewById(R.id.game_BTN_shot_R);
-        game_BTN_shot_M = findViewById(R.id.game_BTN_shot_M);
-        game_BTN_freeKick_R = findViewById(R.id.game_BTN_freeKick_R);
-        game_BTN_freeKick_M = findViewById(R.id.game_BTN_freeKick_M);
-        game_BTN_penalty_R = findViewById(R.id.game_BTN_penalty_R);
-        game_BTN_penalty_M = findViewById(R.id.game_BTN_penalty_M);
-    }
+
 
     private void setListener(Button btn, View.OnClickListener func) {
         btn.setOnClickListener(func);
     }
 
-    private void glide(int img, ImageView into) {
-        Glide
-                .with(Activity_Game.this)
-                .load(img)
-                .centerCrop()
-                .into(into);
-    }
-
     private boolean endGame() {
         if (MESSILIFE <= 0) {
-            postWinner("Ronaldo", game_IMG_ronalno,numberOfStepsRonaldo);
+            postWinner("Ronaldo", R.drawable.ic_ronaldo ,numberOfStepsRonaldo);
             return false;
         } else if (RONALDOLIFE <= 0) {
-            postWinner("Messi", game_IMG_messi,numberOfStepsMessi);
+            postWinner("Messi", R.drawable.ic_messi,numberOfStepsMessi);
             return false;
         }
         return true;
     }
 
-    private void postWinner(String winner, ImageView pic,int numberOfSteps) {
+    private void postWinner(String winner, int pic ,int numberOfSteps) {
         Log.d("pttt", "WINNER ------> ronaldo life = " + RONALDOLIFE + " messi life = " + MESSILIFE);
         addToScoresList(winner,numberOfSteps);
-        pic.buildDrawingCache();
-        Bitmap bitmap = pic.getDrawingCache();
         Intent myIntent = new Intent(Activity_Game.this, Activity_Winner.class);
         myIntent.putExtra(Activity_Winner.winnerPlayer, winner);
-        myIntent.putExtra(Activity_Winner.image, bitmap);
+        myIntent.putExtra(Activity_Winner.image, pic);
         myIntent.putExtra(Activity_Winner.numOfSteps,numberOfSteps);
         startActivity(myIntent);
         finish();
@@ -179,7 +165,7 @@ public class Activity_Game extends AppCompatActivity {
     private void addToScoresList(String winner,int numberOfSteps) {
         scores = MySharedPreferencesV4.getInstance().getArray("DATA",new TypeToken<ArrayList<TopTen>>(){});
         if(scores == null) scores = new ArrayList<TopTen>();
-        scores.add(new TopTen(winner,lat,lon,123,numberOfSteps));
+        scores.add(new TopTen(winner,lat,lon,numberOfSteps));
         Collections.sort(scores);
         if(scores.size() > 10){
             scores.remove(scores.size() -1);
@@ -275,7 +261,6 @@ public class Activity_Game extends AppCompatActivity {
 
     /* update player life , change turn and set new player life*/
     private int setlife(int playerLife, int type, ProgressBar playerBar, boolean isRonaldo) {
-        Log.d("pttt", "setlife: ronaldo turn " + isRonaldo);
         playerLife = playerLife - type;
         playerBar.setProgress(playerLife);
         ronaldoTurn = isRonaldo;

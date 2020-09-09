@@ -31,6 +31,8 @@ public class Activity_Results extends AppCompatActivity implements CallBack_List
         transaction1.commit();
     }
 
+
+    //get location from view list and move the map to the new location
     @Override
     public void getLocation(double lat, double lon) {
         fragment_map.setLat(lat);

@@ -18,7 +18,6 @@ public class Fragment_List extends Fragment {
     private ListView list_LST_list;
     private ArrayList<TopTen> topTens;
     private CallBack_List callBack_list;
-    //public final String EXTRA_KEY_DATA = "EXTRA_KEY_DATA";
 
     public void setActivityCallBack(CallBack_List callBack_list) {
         this.callBack_list = callBack_list;
@@ -41,13 +40,16 @@ public class Fragment_List extends Fragment {
             view = inflater.inflate(R.layout.fragment_list, container, false);
         }
         findViews(view);
+
+        //get topTen list from SP
         topTens = MySharedPreferencesV4.getInstance().getArray("DATA",new TypeToken<ArrayList<TopTen>>(){});
+
         if(topTens != null){
             ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity().getApplicationContext(),android.R.layout.simple_list_item_1,topTens);
+            setPositions();
             list_LST_list.setAdapter(arrayAdapter);
         }
-
-
+        //sending lat & lon
         list_LST_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> listView, View itemView, int itemPosition, long itemId)
             {
@@ -55,8 +57,13 @@ public class Fragment_List extends Fragment {
                 callBack_list.getLocation(topTens.get(itemPosition).getLat(),topTens.get(itemPosition).getLon());
             }
         });
-
         return view;
+    }
+
+    private void setPositions() {
+        for(int i=1;i<=topTens.size();i++){
+            topTens.get(i-1).setPosition(i);
+        }
     }
 
     private void findViews(View view) {

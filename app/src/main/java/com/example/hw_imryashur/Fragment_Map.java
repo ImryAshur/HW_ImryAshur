@@ -5,7 +5,6 @@ package com.example.hw_imryashur;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +24,7 @@ public class Fragment_Map extends Fragment {
     protected View view;
     private MapView mMapView;
     private GoogleMap googleMap;
+
     // Init Tel Aviv lat and lon
     private double lat = 32.0646;
     private double lon = 34.7722;
@@ -38,14 +38,6 @@ public class Fragment_Map extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-    }
-
-    public double getLat() {
-        return lat;
-    }
-
-    public double getLon() {
-        return lon;
     }
 
     @Override
@@ -63,7 +55,6 @@ public class Fragment_Map extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.d("pttt", "onCreateView: here");
         moveMap();
 
         return view;
@@ -91,11 +82,11 @@ public class Fragment_Map extends Fragment {
                 googleMap.setMyLocationEnabled(true);
 
                 // For dropping a marker at a point on the Map
-                LatLng TelAviv = new LatLng(lat, lon);
-                googleMap.addMarker(new MarkerOptions().position(TelAviv).title("Tel-Aviv"));
+                LatLng myLoc = new LatLng(lat, lon);
+                googleMap.addMarker(new MarkerOptions().position(myLoc));
 
                 // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(TelAviv).zoom(12).build();
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(myLoc).zoom(12).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
         });
@@ -127,7 +118,6 @@ public class Fragment_Map extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Log.d("pttt", "onSaveInstanceState");
         super.onSaveInstanceState(outState);
     }
     private void findViews(View view) {

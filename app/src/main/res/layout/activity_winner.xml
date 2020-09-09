@@ -18,7 +18,7 @@
         android:padding="20dp">
 
         <TextView
-        android:id="@+id/menu_LBL_winnerName"
+        android:id="@+id/winner_LBL_winnerName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
@@ -28,7 +28,7 @@
         android:layout_weight="1"
         android:textSize="24sp"/>
         <TextView
-            android:id="@+id/menu_LBL_numOfSteps"
+            android:id="@+id/winner_LBL_numOfSteps"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"
@@ -39,7 +39,7 @@
             android:textSize="20sp"/>
 
         <ImageView
-            android:id="@+id/menu_IMG_winnerPic"
+            android:id="@+id/winner_IMG_winnerPic"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
@@ -51,14 +51,14 @@
             android:layout_margin="2dp"
             android:orientation="horizontal">
         <Button
-            android:id="@+id/menu_BTN_newGame"
+            android:id="@+id/winner_BTN_newGame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:text="new game" />
         <Button
-            android:id="@+id/menu_BTN_topTen"
+            android:id="@+id/winner_BTN_topTen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

@@ -2,25 +2,22 @@ package com.example.hw_imryashur;
 /*
     Student - Imry Ashur
 */
-
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.bumptech.glide.Glide;
 
 public class Activity_Winner extends AppCompatActivity {
-    private ImageView menu_IMG_winnerPic;
-    private TextView menu_LBL_winnerName;
-    private TextView menu_LBL_numOfSteps;
-    private Button menu_BTN_newGame;
-    private Button menu_BTN_topTen;
+    private ImageView winner_IMG_winnerPic;
+    private TextView winner_LBL_winnerName;
+    private TextView winner_LBL_numOfSteps;
+    private Button winner_BTN_newGame;
+    private Button winner_BTN_topTen;
     private String winnerName;
-    private Bitmap bitmap;
+    private int pic = 0;
     private int steps = 0;
     public static final String winnerPlayer = "winnerPlayer";
     public static final String image = "image";
@@ -33,31 +30,27 @@ public class Activity_Winner extends AppCompatActivity {
         findViews();
         getMyIntent();
         MySignalV2.getInstance().makeSound(R.raw.victory_sound);
-        menu_LBL_winnerName.setText(winnerName + " Wins!");
-        menu_LBL_numOfSteps.setText("Number Of Steps: " + steps);
-        menu_BTN_newGame.setOnClickListener(newGameBtn);
-        menu_BTN_topTen.setOnClickListener(topTen);
+        winner_IMG_winnerPic.setImageResource(pic);
+        winner_LBL_winnerName.setText(winnerName + " Wins!");
+        winner_LBL_numOfSteps.setText("Number Of Steps: " + steps);
+        winner_BTN_newGame.setOnClickListener(newGameBtn);
+        winner_BTN_topTen.setOnClickListener(topTen);
 
-        Glide
-                .with(this)
-                .load(bitmap)
-                .centerCrop()
-                .into(menu_IMG_winnerPic);
     }
 
     private void getMyIntent() {
         Intent intent = getIntent();
         winnerName = intent.getStringExtra(winnerPlayer);
         steps = intent.getIntExtra(numOfSteps,0);
-        bitmap = (Bitmap) intent.getParcelableExtra(image);
+        pic = intent.getIntExtra(image,0);
     }
 
     private void findViews() {
-        menu_IMG_winnerPic = findViewById(R.id.menu_IMG_winnerPic);
-        menu_LBL_winnerName = findViewById(R.id.menu_LBL_winnerName);
-        menu_LBL_numOfSteps = findViewById(R.id.menu_LBL_numOfSteps);
-        menu_BTN_newGame = findViewById(R.id.menu_BTN_newGame);
-        menu_BTN_topTen = findViewById(R.id.menu_BTN_topTen);
+        winner_IMG_winnerPic = findViewById(R.id.winner_IMG_winnerPic);
+        winner_LBL_winnerName = findViewById(R.id.winner_LBL_winnerName);
+        winner_LBL_numOfSteps = findViewById(R.id.winner_LBL_numOfSteps);
+        winner_BTN_newGame = findViewById(R.id.winner_BTN_newGame);
+        winner_BTN_topTen = findViewById(R.id.winner_BTN_topTen);
     }
 
     private View.OnClickListener newGameBtn = new View.OnClickListener() {

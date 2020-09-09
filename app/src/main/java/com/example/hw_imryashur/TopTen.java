@@ -1,26 +1,33 @@
 package com.example.hw_imryashur;
-
+/*
+    Student - Imry Ashur
+*/
 public class TopTen implements Comparable<TopTen>{
     private String name = "";
     private double lat = 0.0;
     private double lon = 0.0;
-    private long time = 0;
     private int numOfSteps = 100;
+    private int position = 0;
 
     public TopTen() {}
 
-    public TopTen(String name, double lat, double lon, long time, int numOfSteps) {
+    public TopTen(String name, double lat, double lon, int numOfSteps) {
         this.name = name;
         this.lat = lat;
         this.lon = lon;
-        this.time = time;
         this.numOfSteps = numOfSteps;
     }
 
 
     @Override
     public String toString() {
-        return name + ": " + " Number Of Moves - " + numOfSteps;
+        return position + ".) " + name + ": " + " Number Of Moves - " + numOfSteps;
+    }
+
+    @Override
+    public int compareTo(TopTen another) {
+        if (this.getNumOfSteps() < another.getNumOfSteps()) return -1;
+        else return 1;
     }
 
     public String getName() {
@@ -35,38 +42,18 @@ public class TopTen implements Comparable<TopTen>{
         return lat;
     }
 
-    public void setLat(double lat) {
-        this.lat = lat;
-    }
-
     public double getLon() {
         return lon;
-    }
-
-    public void setLon(double lon) {
-        this.lon = lon;
-    }
-
-    public long getTime() {
-        return time;
-    }
-
-    public void setTime(long time) {
-        this.time = time;
     }
 
     public int getNumOfSteps() {
         return numOfSteps;
     }
 
-    public void setNumOfSteps(int numOfSteps) {
-        this.numOfSteps = numOfSteps;
+    public void setPosition(int position) {
+        this.position = position;
     }
 
-
-    @Override
-    public int compareTo(TopTen another) {
-        if (this.getNumOfSteps() < another.getNumOfSteps()) return -1;
-        else return 1;
-    }
 }
+
+

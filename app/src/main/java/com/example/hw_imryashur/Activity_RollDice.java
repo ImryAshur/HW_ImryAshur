@@ -30,11 +30,13 @@ public class Activity_RollDice extends AppCompatActivity implements GoogleApiCli
     public static final Random RANDOM = new Random();
     private Button rollDice_BTN_rollDices, rollDice_BTN_topTen ;
     private ImageView rollDice_IMG_cube1, rollDice_IMG_cube2, rollDice_IMG_ronaldo, rollDice_IMG_messi;
-    private int ronaldoScore, messiScore;
-    private GoogleApiClient mGoogleApiClient;
-    private Location mLastLocation;
+    private int ronaldoScore = 0;
+    private int messiScore = 0;
     private double lat = 0.0;
     private double lon = 0.0;
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public class Activity_RollDice extends AppCompatActivity implements GoogleApiCli
         rollDice_BTN_topTen.setOnClickListener(topTenListener);
     }
 
+
     private void initLocation() {
         if (ActivityCompat.checkSelfPermission(Activity_RollDice.this, Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED) {
@@ -55,7 +58,6 @@ public class Activity_RollDice extends AppCompatActivity implements GoogleApiCli
             ActivityCompat.requestPermissions(Activity_RollDice.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
         }
     }
-
 
     private void getLocation() {
         if (mGoogleApiClient == null) {
@@ -85,12 +87,13 @@ public class Activity_RollDice extends AppCompatActivity implements GoogleApiCli
     }
 
     private void initviews() {
-        glide(R.drawable.ronaldo, rollDice_IMG_ronaldo);
-        glide(R.drawable.messi, rollDice_IMG_messi);
+        rollDice_IMG_messi.setImageResource(R.drawable.ic_messi);
+        rollDice_IMG_ronaldo.setImageResource(R.drawable.ic_ronaldo);
         glide(R.drawable.dice_6, rollDice_IMG_cube1);
         glide(R.drawable.dice_6, rollDice_IMG_cube2);
     }
 
+    // Get permission from user until he accept
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 44) {
@@ -102,6 +105,7 @@ public class Activity_RollDice extends AppCompatActivity implements GoogleApiCli
         }
     }
 
+    // use glide for dice pictures
     private void glide(int img, ImageView into) {
         Glide
                 .with(Activity_RollDice.this)
@@ -174,6 +178,7 @@ public class Activity_RollDice extends AppCompatActivity implements GoogleApiCli
         else MySignalV2.getInstance().showToast("It's A Tie Roll Again!");
     }
 
+    //sending lat & lon to the new activity
     private void startGame(String name, boolean ronaldoTurn) {
         MySignalV2.getInstance().showToast(name);
         Intent intent = new Intent(Activity_RollDice.this, Activity_Game.class);
@@ -195,6 +200,7 @@ public class Activity_RollDice extends AppCompatActivity implements GoogleApiCli
         }, delay);
     }
 
+    //get lat & lon
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         try {
