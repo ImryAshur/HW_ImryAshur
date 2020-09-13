@@ -54,6 +54,21 @@ public class TopTen implements Comparable<TopTen>{
         this.position = position;
     }
 
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public void setLon(double lon) {
+        this.lon = lon;
+    }
+
+    public void setNumOfSteps(int numOfSteps) {
+        this.numOfSteps = numOfSteps;
+    }
+
+    public int getPosition() {
+        return position;
+    }
 }
 
 

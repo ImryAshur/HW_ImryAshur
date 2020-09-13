@@ -16,7 +16,7 @@ public class Activity_Winner extends AppCompatActivity {
     private TextView winner_LBL_numOfSteps;
     private Button winner_BTN_newGame;
     private Button winner_BTN_topTen;
-    private String winnerName;
+    private String winnerName = "";
     private int pic = 0;
     private int steps = 0;
     public static final String winnerPlayer = "winnerPlayer";
@@ -35,7 +35,6 @@ public class Activity_Winner extends AppCompatActivity {
         winner_LBL_numOfSteps.setText("Number Of Steps: " + steps);
         winner_BTN_newGame.setOnClickListener(newGameBtn);
         winner_BTN_topTen.setOnClickListener(topTen);
-
     }
 
     private void getMyIntent() {
@@ -57,8 +56,6 @@ public class Activity_Winner extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             MySignalV2.getInstance().makeSound(R.raw.click_on);
-            Intent myIntent = new Intent(Activity_Winner.this, Activity_RollDice.class);
-            Activity_Winner.this.startActivity(myIntent);
             finish();
         }
     };
@@ -67,7 +64,7 @@ public class Activity_Winner extends AppCompatActivity {
         public void onClick(View view) {
             MySignalV2.getInstance().makeSound(R.raw.click_on);
             Intent myIntent = new Intent(Activity_Winner.this, Activity_Results.class);
-            Activity_Winner.this.startActivity(myIntent);
+            startActivity(myIntent);
         }
     };
 }
